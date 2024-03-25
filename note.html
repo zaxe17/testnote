@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add New Folder</title>
+<style>
+    #folderList {
+        list-style-type: none;
+        padding: 0;
+    }
+    .folderItem {
+        margin-bottom: 5px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Add New Folder</h2>
+
+<input type="text" id="folderName" placeholder="Enter folder name">
+<button onclick="addFolder()">Add Folder</button>
+
+<ul id="folderList">
+    <!-- Existing folders will be added here -->
+</ul>
+
+<script>
+// Load existing folders from localStorage when the page loads
+window.onload = function() {
+    var savedFolders = JSON.parse(localStorage.getItem('folders')) || [];
+    savedFolders.forEach(function(folderName) {
+        addFolderToList(folderName);
+    });
+};
+
+function addFolder() {
+    var folderNameInput = document.getElementById("folderName");
+    var folderName = folderNameInput.value.trim();
+
+    if (folderName !== "") {
+        addFolderToList(folderName);
+
+        // Save the updated folder list to localStorage
+        saveFolders();
+        
+        // Clear the input field after adding the folder
+        folderNameInput.value = "";
+    } else {
+        alert("Please enter a folder name.");
+    }
+}
+
+function addFolderToList(folderName) {
+    var folderList = document.getElementById("folderList");
+    var folderItem = document.createElement("li");
+    folderItem.className = "folderItem";
+
+    var folderLink = document.createElement("a");
+    folderLink.href = "#"; // You can set the link destination if needed
+    folderLink.textContent = folderName;
+
+    folderItem.appendChild(folderLink);
+    folderList.appendChild(folderItem);
+}
+
+function saveFolders() {
+    var folderItems = document.querySelectorAll(".folderItem");
+    var folders = [];
+    folderItems.forEach(function(folderItem) {
+        folders.push(folderItem.textContent);
+    });
+    localStorage.setItem('folders', JSON.stringify(folders));
+}
+</script>
+
+</body>
+</html>
